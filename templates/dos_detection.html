@@ -172,12 +172,38 @@
         }
         footer {
             text-align: center;
-            padding: 10px;
+            padding: 20px 10px;
             background-color: rgba(178, 71, 71, 0.1);
             color: white;
-            position: fixed;
-            bottom: 0;
+            position: relative;
+            margin-top: auto;
             width: 100%;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 80px 10px 20px 10px;
+                width: auto;
+            }
+            .dos-input {
+                padding: 20px;
+            }
+            .dos-input button {
+                width: 100%;
+            }
+            .navbar {
+                padding: 10px;
+            }
+            .home-btn {
+                padding: 8px 15px;
+                font-size: 16px;
+            }
+            .inputs-row {
+                gap: 10px;
+            }
+            .input-column {
+                flex: 1 1 100%;
+            }
         }
     </style>
     <script>
@@ -235,7 +261,7 @@
 </head>
 <body>
     <div class="navbar">
-       
+        <a href="{{ url_for('home') }}" class="home-btn">Home</a>
     </div>
 
     <div class="main-content">

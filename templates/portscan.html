@@ -7,6 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         :root {
             --primary: #6a5acd;
             --primary-dark: #483d8b;
@@ -23,10 +28,39 @@
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 60px 0 0 0;
             background: linear-gradient(135deg, #0815ad 0%, #8282e0 100%);
             color: #e0e0e0;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: rgba(25, 20, 50, 0.9);
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .home-btn {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background-color: var(--primary);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: var(--primary-dark);
+            color: white;
         }
         
         .container {
@@ -392,9 +426,31 @@
                 width: 100%;
             }
         }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px;
+            }
+            .home-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+        footer {
+            text-align: center;
+            padding: 20px 10px;
+            background-color: rgba(25, 20, 50, 0.9);
+            color: white;
+            position: relative;
+            margin-top: auto;
+            width: 100%;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="{{ url_for('home') }}" class="home-btn">Home</a>
+    </div>
     <div class="container">
         <header>
             <h1><i class="fas fa-shield-alt"></i> Port Scan Detection Dashboard</h1>
@@ -586,5 +642,8 @@
         loadInterfaces();
         fetchAlerts();
     </script>
+    <footer>
+        &copy; 2025 Port Scan Detection Dashboard | All Rights Reserved
+    </footer>
 </body>
 </html>

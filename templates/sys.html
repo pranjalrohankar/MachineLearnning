@@ -25,6 +25,55 @@
             background: linear-gradient(135deg, #0a0e2e 0%, #1a1a4a 100%);
             color: #ffffff;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .navbar {
+            background-color: rgba(10, 14, 46, 0.9);
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .home-btn {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px 16px;
+            background-color: var(--primary);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 20px 10px;
+            background-color: rgba(10, 14, 46, 0.9);
+            color: white;
+            position: relative;
+            margin-top: auto;
+            width: 100%;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px;
+            }
+            .home-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
         }
         
         .container {
@@ -212,6 +261,9 @@
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="{{ url_for('home') }}" class="home-btn">Home</a>
+    </div>
     <div class="container py-4">
         <h1 class="text-center mb-4">SYN Flood Detection System</h1>
         
@@ -598,5 +650,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer>
+        &copy; 2025 SYN Flood Detector | All Rights Reserved
+    </footer>
 </body>
 </html>

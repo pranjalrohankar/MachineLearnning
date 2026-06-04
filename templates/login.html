@@ -9,17 +9,22 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
         body {
-            font-family: 'Orbitron', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: rgb(15, 29, 121);
-            color: #d1d1d1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    padding: 80px 0 20px 0;
+    background-color: rgb(15, 29, 121);
+    color: #d1d1d1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
+}
 
         .navbar {
             background-color: rgba(19, 6, 19, 0.6);
@@ -47,14 +52,16 @@
 
         .registration-card {
             background: rgba(19, 6, 19, 0.9);
-            padding: 40px;
+            padding: 40px 20px;
             border-radius: 15px;
-            width: 600px;
-            height: 400px;
+            width: 90%;
+            max-width: 500px;
+            min-height: 400px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
             text-align: center;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
         }
 
         .registration-card h2 {
@@ -105,11 +112,11 @@
 
         footer {
             text-align: center;
-            padding: 10px;
+            padding: 20px 10px;
             background-color: rgba(178, 71, 71, 0.1);
             color: white;
-            position: fixed;
-            bottom: 0;
+            position: relative;
+            margin-top: auto;
             width: 100%;
         }
     </style>

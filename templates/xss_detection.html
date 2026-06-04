@@ -46,10 +46,10 @@
             background-color: rgba(34, 21, 176, 1);
         }
         .main-content {
-            max-width: 1500px;
-            margin: 80px auto;
+            margin: 80px auto 20px auto;
             padding: 60px;
-            width: 800px;
+            width: 90%;
+            max-width: 800px;
             background-color: rgba(19, 6, 19, 0.6);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -149,19 +149,39 @@
 
         footer {
             text-align: center;
-            padding: 10px;
+            padding: 20px 10px;
             background-color: rgba(178, 71, 71, 0.1);
             color: white;
-            position: fixed;
-            bottom: 0;
+            position: relative;
+            margin-top: auto;
             width: 100%;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 80px 10px 20px 10px;
+                width: auto;
+            }
+            .xss-detection {
+                padding: 20px;
+            }
+            .xss-detection button {
+                width: 100%;
+            }
+            .navbar {
+                padding: 10px;
+            }
+            .home-btn {
+                padding: 8px 15px;
+                font-size: 16px;
+            }
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="navbar">
-       
+        <a href="{{ url_for('home') }}" class="home-btn">Home</a>
     </div>
 
     <div class="main-content">

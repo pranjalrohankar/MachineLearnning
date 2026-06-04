@@ -38,6 +38,19 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .home-btn {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(74, 107, 255, 0.8);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: rgba(74, 107, 255, 1);
+        }
         .main-content {
             max-width: 900px;
             margin: 100px auto 60px;
@@ -237,13 +250,33 @@
         }
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 20px 10px;
             background-color: rgba(25, 10, 25, 0.8);
             color: white;
-            position: fixed;
-            bottom: 0;
+            position: relative;
+            margin-top: auto;
             width: 100%;
             font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 80px 10px 20px 10px;
+                width: auto;
+            }
+            .detection-container {
+                padding: 20px;
+            }
+            .navbar {
+                padding: 10px 20px;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            .home-btn {
+                padding: 8px 15px;
+                font-size: 16px;
+            }
         }
         .loading {
             display: none;
@@ -274,6 +307,7 @@
 <body>
     <div class="navbar">
         <div class="logo">PhishGuard Pro</div>
+        <a href="{{ url_for('home') }}" class="home-btn">Home</a>
     </div>
 
     <div class="main-content">
