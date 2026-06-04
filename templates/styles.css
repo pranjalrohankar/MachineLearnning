@@ -9,7 +9,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #0B1121 0%, #0F172A 100%);
+    background-color: rgb(15, 29, 121);
     background-attachment: fixed;
     color: #F8FAFC;
     line-height: 1.6;
@@ -116,14 +116,11 @@ h1, h2, h3, h4, h5, h6, .nav-brand {
 
 /* Main Content Containers */
 .main-content {
-    margin-top: 0;
-    padding: 100px 30px 30px 30px;
-    background: rgba(30, 41, 59, 0.4);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-top: 90px;
+    padding: 20px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .main-content h1 {
