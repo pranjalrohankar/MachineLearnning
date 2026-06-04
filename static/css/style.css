@@ -1,0 +1,209 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(150, 9, 182, 0.8);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 20px;
+    z-index: 1000;
+}
+
+.navbar .dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.navbar select {
+    background-color: rgba(153, 21, 176, 0.8);
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.navbar select:hover {
+    background-color: #9808ab;
+}
+
+/* Main Content */
+.main-content {
+    margin-top: 80px; /* Prevent content from being hidden behind navbar */
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+.main-content h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #e1e1e1;
+}
+
+.main-content p {
+    font-size: 1.2em;
+    color: #ccc;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+/* Attack Result Cards */
+.attack-result {
+    background-color: #990fae; /* Purple background */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 700px;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.attack-result h2 {
+    font-size: 1.8em;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.attack-result p {
+    font-size: 1.1em;
+    color: #d1d1d1;
+}
+
+/* Hover effect for attack-result cards */
+.attack-result:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* About Us Section */
+.about-us {
+    background-color: rgba(171, 16, 185, 0.8);
+    padding: 50px 20px;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 8px;
+}
+
+.about-us h1 {
+    font-size: 2.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.about-us p {
+    font-size: 1.2em;
+    color: #d1d1d1;
+    margin-bottom: 30px;
+}
+
+/* Team Section */
+.team-members {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.team-member {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+}
+
+.team-member h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #990fae;
+}
+
+.team-member p {
+    font-size: 1.1em;
+    color: #333;
+}
+
+.team-member:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(147, 20, 164, 0.8);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9em;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .navbar select {
+        width: 100%;
+    }
+
+    .main-content {
+        margin-top: 120px; /* Adjust for navbar overlap */
+    }
+
+    .team-members {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-member {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content h1 {
+        font-size: 1.8em;
+    }
+
+    .main-content p {
+        font-size: 1em;
+    }
+
+    .attack-result h2 {
+        font-size: 1.5em;
+    }
+
+    .team-member {
+        width: 90%;
+    }
+}
