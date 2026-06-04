@@ -5,197 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
-        body {
-    font-family: 'Orbitron', sans-serif;
-    margin: 0;
-    padding: 80px 0 20px 0;
-    background-color: rgb(15, 29, 121);
-    color: #d1d1d1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-        .navbar {
-            background: rgba(19, 6, 19, 0.8) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            padding: 12px 0;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .main-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            width: 100%;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ffffff !important;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-brand:hover {
-            transform: translateY(-1px);
-            color: #4cc9f0 !important;
-        }
-
-        .nav-brand i {
-            color: #4cc9f0;
-            font-size: 22px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-link {
-            color: #b8c1ff !important;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-link i {
-            font-size: 16px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding-top: 130px !important;
-            }
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .navbar {
-                padding: 15px 0;
-            }
-            .nav-links {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            .nav-link {
-                font-size: 14px;
-                padding: 5px 10px;
-            }
+            min-height: calc(100vh - 160px);
+            margin-top: 80px;
+            background: transparent;
+            box-shadow: none;
+            border: none;
+            padding: 20px;
         }
 
         .registration-card {
-            background: rgba(19, 6, 19, 0.9);
-            padding: 40px 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            min-height: 400px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            background: rgba(30, 41, 59, 0.7);
+            padding: 40px 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: fadeIn 0.5s ease-out;
         }
 
         .registration-card h2 {
-            color: white;
-            margin-bottom: 20px;
+            color: #F8FAFC;
+            margin-bottom: 25px;
             font-size: 28px;
+            font-family: 'Outfit', sans-serif;
         }
 
         input[type="text"],
         input[type="email"],
         input[type="password"] {
-            width: 90%;
-            padding: 15px;
-            margin: 10px 0;
-            margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            text-align: center;
+            background: rgba(15, 23, 42, 0.6);
+            color: #F8FAFC;
+            text-align: left;
             outline: none;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         input:focus {
-            box-shadow: 0 0 10px rgba(79, 147, 200, 0.7);
-            border-color: #38a1b2;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+            border-color: #38BDF8;
         }
 
-        button {
-            width: 50%;
-            padding: 12px;
-            background: linear-gradient(45deg, #1522b0, #4d79ff);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 40px;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(21, 34, 176, 0.7);
-        }
-
-        button:hover {
-            background: linear-gradient(45deg, #4d79ff, #1522b0);
-            box-shadow: 0 6px 15px rgba(182, 184, 207, 0.9);
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px 10px;
-            background: rgba(19, 6, 19, 0.8) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #b8c1ff;
-            position: relative;
-            margin-top: auto;
+        button[type="submit"] {
             width: 100%;
-            font-size: 14px;
-            font-family: inherit;
+            padding: 14px;
+            background: #38BDF8;
+            color: #0F172A;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+        }
+
+        button[type="submit"]:hover {
+            background: #F8FAFC;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>

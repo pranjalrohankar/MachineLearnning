@@ -1,4 +1,6 @@
 /* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,207 +8,140 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #fff;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0B1121 0%, #0F172A 100%);
+    background-attachment: fixed;
+    color: #F8FAFC;
     line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Navbar */
-.navbar {
-    background-color: rgba(150, 9, 182, 0.8);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 10px 20px;
-    z-index: 1000;
+h1, h2, h3, h4, h5, h6, .nav-brand {
+    font-family: 'Outfit', sans-serif;
 }
 
-.navbar .dropdown {
-    position: relative;
-    display: inline-block;
+/* Navbar */
+.navbar {
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: fixed;
     width: 100%;
+    top: 0;
+    left: 0;
+    padding: 12px 20px;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .navbar select {
-    background-color: rgba(153, 21, 176, 0.8);
-    color: white;
-    font-size: 16px;
-    padding: 10px 15px;
-    border: none;
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #F8FAFC;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 6px;
     width: 100%;
+    transition: all 0.3s ease;
 }
 
 .navbar select:hover {
-    background-color: #9808ab;
+    background-color: rgba(56, 189, 248, 0.1);
+    border-color: #38BDF8;
 }
 
-/* Main Content */
+/* Main Content Containers */
 .main-content {
-    margin-top: 80px; /* Prevent content from being hidden behind navbar */
-    padding: 20px;
-    background-color: #333;
-    border-radius: 8px;
+    margin-top: 90px;
+    padding: 30px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .main-content h1 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 2em;
-    color: #e1e1e1;
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+    color: #F8FAFC;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
 .main-content p {
-    font-size: 1.2em;
-    color: #ccc;
-    text-align: justify;
+    font-size: 1.1rem;
+    color: #94A3B8;
     margin-bottom: 20px;
 }
 
 /* Attack Result Cards */
 .attack-result {
-    background-color: #990fae; /* Purple background */
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px 0;
+    background: rgba(30, 41, 59, 0.7);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 15px 0;
     width: 100%;
     max-width: 700px;
     text-align: left;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .attack-result h2 {
-    font-size: 1.8em;
-    color: #fff;
-    margin-bottom: 15px;
+    font-size: 1.6rem;
+    color: #38BDF8;
+    margin-bottom: 12px;
 }
 
 .attack-result p {
-    font-size: 1.1em;
-    color: #d1d1d1;
+    font-size: 1.05rem;
+    color: #CBD5E1;
 }
 
-/* Hover effect for attack-result cards */
 .attack-result:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* About Us Section */
-.about-us {
-    background-color: rgba(171, 16, 185, 0.8);
-    padding: 50px 20px;
-    text-align: center;
-    margin-top: 30px;
-    border-radius: 8px;
-}
-
-.about-us h1 {
-    font-size: 2.5em;
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.about-us p {
-    font-size: 1.2em;
-    color: #d1d1d1;
-    margin-bottom: 30px;
-}
-
-/* Team Section */
-.team-members {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 30px;
-}
-
-.team-member {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.team-member img {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 15px;
-}
-
-.team-member h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #990fae;
-}
-
-.team-member p {
-    font-size: 1.1em;
-    color: #333;
-}
-
-.team-member:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.3);
 }
 
 /* Footer */
 footer {
     text-align: center;
-    padding: 10px;
-    background-color: rgba(147, 20, 164, 0.8);
-    color: white;
+    padding: 24px 20px;
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94A3B8;
     position: relative;
     margin-top: auto;
     width: 100%;
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
-/* Media Queries for Responsiveness */
+/* Buttons Base */
+button, .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .navbar select {
-        width: 100%;
-    }
-
     .main-content {
-        margin-top: 120px; /* Adjust for navbar overlap */
+        margin-top: 120px;
+        padding: 20px;
     }
-
-    .team-members {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .team-member {
-        width: 80%;
-    }
-}
-
-@media (max-width: 480px) {
     .main-content h1 {
-        font-size: 1.8em;
-    }
-
-    .main-content p {
-        font-size: 1em;
-    }
-
-    .attack-result h2 {
-        font-size: 1.5em;
-    }
-
-    .team-member {
-        width: 90%;
+        font-size: 2rem;
     }
 }

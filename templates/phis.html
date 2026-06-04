@@ -5,106 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Phishing Detection</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f1d79, #1a0a1a);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .navbar {
-            background: rgba(25, 10, 25, 0.9) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            padding: 12px 0;
-            transition: all 0.3s ease;
-        }
+        
+        
+        
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
+        
 
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ffffff !important;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s ease;
-        }
+        
 
-        .nav-brand:hover {
-            transform: translateY(-1px);
-            color: #4cc9f0 !important;
-        }
+        
 
-        .nav-brand i {
-            color: #4cc9f0;
-            font-size: 22px;
-        }
+        
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        
 
-        .nav-link {
-            color: #b8c1ff !important;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
+        
 
-        .nav-link:hover {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.1);
-        }
+        
 
-        .nav-link i {
-            font-size: 16px;
-        }
-        .main-content {
-            max-width: 900px;
-            margin: 100px auto 60px;
-            padding: 40px;
-            background-color: rgba(25, 10, 25, 0.7);
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            flex-grow: 1;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        
+        
         h1 {
             text-align: center;
             margin-bottom: 30px;
@@ -129,7 +51,7 @@
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
-            color: #333;
+            color: #F8FAFC;
             font-size: 18px;
         }
         input[type="text"] {
@@ -292,46 +214,14 @@
             left: 10px;
             font-weight: bold;
         }
-        footer {
-            text-align: center;
-            padding: 25px 10px;
-            background: rgba(19, 6, 19, 0.8) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #b8c1ff;
-            position: relative;
-            margin-top: auto;
-            width: 100%;
-            font-size: 14px;
-            font-family: inherit;
-        }
+        
         @media (max-width: 768px) {
-            body {
-                padding-top: 130px !important;
-            }
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .navbar {
-                padding: 15px 0;
-            }
-            .nav-links {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            .nav-link {
-                font-size: 14px;
-                padding: 5px 10px;
-            }
-            .main-content {
-                padding: 20px;
-                margin: 20px 10px;
-                width: auto;
-            }
+            
+            
+            
+            
+            
+            
             .detection-container {
                 padding: 20px;
             }

@@ -5,89 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThreatDetect AI - Network Security with AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: #960ca8;
-            color: #333;
-        }
-
-        .navbar {
-            background: rgba(19, 6, 19, 0.8) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            padding: 12px 0;
-            transition: all 0.3s ease;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ffffff !important;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-brand:hover {
-            transform: translateY(-1px);
-            color: #4cc9f0 !important;
-        }
-
-        .nav-brand i {
-            color: #4cc9f0;
-            font-size: 22px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-link {
-            color: #b8c1ff !important;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-link i {
-            font-size: 16px;
-        }
-
         .hero {
             position: relative;
             height: 100vh;
@@ -95,7 +14,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: #001227;
+            background: transparent;
             color: #fff;
             overflow: hidden;
         }
@@ -104,35 +23,42 @@
             max-width: 800px;
             padding: 20px;
             z-index: 10;
+            animation: fadeIn 1s ease-out;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 4rem;
             margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            font-family: 'Outfit', sans-serif;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            color: #CBD5E1;
+            font-family: 'Inter', sans-serif;
         }
 
         .hero .cta-button {
-            background-color: #fff;
-            color: #13021b;
+            background-color: #38BDF8;
+            color: #0F172A;
             border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
+            padding: 16px 36px;
+            font-size: 1.1rem;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
             text-transform: uppercase;
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
         }
 
         .hero .cta-button:hover {
-            background-color: #0f6b9d;
-            color: #fff;
-            border: 2px solid #fff;
+            background-color: #F8FAFC;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.6);
         }
 
         #particles-js {
@@ -144,74 +70,28 @@
             z-index: 1;
         }
 
+        .hero footer {
+            position: absolute;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.4) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding: 10px;
-            }
-
-            .navbar .logo {
-                font-size: 20px;
-                margin-right: 0; /* Reset margin for smaller screens */
-            }
-
-            .navbar .tagline {
-                font-size: 16px;
-                margin-top: 10px;
-                white-space: normal; /* Allow wrapping on smaller screens */
-                margin-left: 0; /* Reset margin for smaller screens */
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .hero .cta-button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .hero .cta-button { padding: 12px 24px; font-size: 1rem; }
         }
 
         @media (max-width: 480px) {
-            .navbar .logo {
-                font-size: 18px;
-            }
-
-            .navbar .tagline {
-                font-size: 14px;
-            }
-
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-
-            .hero p {
-                font-size: 0.9rem;
-            }
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px 10px;
-            background: rgba(19, 6, 19, 0.6) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #b8c1ff;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            font-size: 14px;
-            font-family: inherit;
-            z-index: 100;
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
         }
     </style>
 </head>
