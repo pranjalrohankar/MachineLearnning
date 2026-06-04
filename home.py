@@ -2129,10 +2129,11 @@ def gemini_chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-if __name__ == '__main__':
-    init_db()  # Initialize the database
+# Initialize database tables and ML models on startup (essential for WSGI/Gunicorn deployments)
+try:
+    init_db()  # Initialize feedback database
     with app.app_context():
-        get_db().execute('''CREATE TABLE IF NOT EXISTS users
+        get_db().execute('''CREATE TABLE IF NOT EXISTS user
                             (id INTEGER PRIMARY KEY AUTOINCREMENT,
                              fullname TEXT NOT NULL,
                              username TEXT UNIQUE NOT NULL,
@@ -2140,6 +2141,9 @@ if __name__ == '__main__':
                              password TEXT NOT NULL)''')
         get_db().commit()
     logger.info("Initializing models...")
-    initialize_models()  # Ensure this is called before running the app
-        
+    initialize_models()  # Ensure models are trained/loaded on startup
+except Exception as e:
+    logger.error(f"Error during startup initialization: {e}")
+
+if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)
