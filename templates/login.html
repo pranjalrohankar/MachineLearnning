@@ -27,27 +27,100 @@
 }
 
         .navbar {
-            background-color: rgba(19, 6, 19, 0.6);
-            overflow: hidden;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 20px;
+            background: rgba(19, 6, 19, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed;
             width: 100%;
             top: 0;
+            left: 0;
             z-index: 1000;
+            padding: 12px 0;
+            transition: all 0.3s ease;
         }
 
-        .navbar a {
-            color: white;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff !important;
             text-decoration: none;
-            padding: 10px 15px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s ease;
         }
 
-        .navbar a:hover {
-            background-color: #333;
-            border-radius: 5px;
+        .nav-brand:hover {
+            transform: translateY(-1px);
+            color: #4cc9f0 !important;
+        }
+
+        .nav-brand i {
+            color: #4cc9f0;
+            font-size: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #b8c1ff !important;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link i {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 130px !important;
+            }
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .navbar {
+                padding: 15px 0;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .nav-link {
+                font-size: 14px;
+                padding: 5px 10px;
+            }
         }
 
         .registration-card {
@@ -112,20 +185,33 @@
 
         footer {
             text-align: center;
-            padding: 20px 10px;
-            background-color: rgba(178, 71, 71, 0.1);
-            color: white;
+            padding: 25px 10px;
+            background: rgba(19, 6, 19, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b8c1ff;
             position: relative;
             margin-top: auto;
             width: 100%;
+            font-size: 14px;
+            font-family: inherit;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="{{ url_for('login') }}">Login</a>
-        <a href="{{ url_for('register') }}">Sign Up</a>
-    </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>ThreatDetect AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{{ url_for('register') }}" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="main-content">
         <div class="registration-card">

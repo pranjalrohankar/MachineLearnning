@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Security with AI</title>
-    
+    <title>ThreatDetect AI - Network Security with AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body, html {
             margin: 0;
@@ -15,39 +15,77 @@
         }
 
         .navbar {
-            background-color: rgba(0, 86, 179, 0.9);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: rgba(19, 6, 19, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 12px 0;
+            transition: all 0.3s ease;
         }
 
-        .navbar .logo {
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-brand {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #fff;
+            color: #ffffff !important;
             text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s ease;
         }
 
-        .navbar .logo img {
-            height: 40px;
-            width: auto;
+        .nav-brand:hover {
+            transform: translateY(-1px);
+            color: #4cc9f0 !important;
         }
 
-        .navbar .tagline {
-            font-size: 18px;
-            color: #fff;
-            font-style: italic;
-            white-space: nowrap;
+        .nav-brand i {
+            color: #4cc9f0;
+            font-size: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #b8c1ff !important;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link i {
+            font-size: 16px;
         }
 
         .hero {
@@ -158,25 +196,35 @@
                 font-size: 0.9rem;
             }
 
-            .hero .cta-button {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
+        footer {
+            text-align: center;
+            padding: 25px 10px;
+            background: rgba(19, 6, 19, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b8c1ff;
+            position: relative;
+            margin-top: auto;
+            width: 100%;
+            font-size: 14px;
+            font-family: inherit;
+            z-index: 100;
         }
     </style>
 </head>
 
 <body>
     <nav class="navbar">
-        <!-- Logo and Project Name -->
-        <a href="model1.html" class="logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995485.png" alt="Network Security Logo">
-            Network Security
-        </a>
-
-        <!-- Tagline -->
-        <div class="tagline">
-            "Securing the Future with AI"
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>ThreatDetect AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{{ url_for('register') }}" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
         </div>
     </nav>
 
@@ -219,5 +267,8 @@
             retina_detect: true
         });
     </script>
+    <footer>
+        &copy; 2025 ThreatDetect AI | Securing the Future with AI
+    </footer>
 </body>
 </html>
