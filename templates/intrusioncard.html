@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrusion Attacks Explained</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #0a1a2a; /* Dark blue background */
+            color: #ffffff; /* White text for contrast */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: rgba(19, 34, 53, 0.9); /* Semi-transparent dark blue background */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3); /* Light blue shadow */
+            border: 1px solid rgba(0, 191, 255, 0.2); /* Light blue border */
+        }
+
+        h1 {
+            text-align: center;
+            color: #00bfff; /* Light blue for emphasis */
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 191, 255, 0.5); /* Light blue glow effect */
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.3); /* Light blue shadow */
+            border: 1px solid rgba(0, 191, 255, 0.2); /* Light blue border */
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #00bfff; /* Light blue for headings */
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 191, 255, 0.3); /* Light blue glow effect */
+        }
+
+        .section p {
+            color: #cccccc; /* Light gray for readability */
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .info-box div {
+            width: 100%;
+            text-align: center;
+            background-color: rgba(0, 191, 255, 0.1); /* Semi-transparent light blue background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.2); /* Light blue shadow */
+            border: 1px solid rgba(0, 191, 255, 0.2); /* Light blue border */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box div:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 191, 255, 0.4); /* Stronger light blue shadow on hover */
+        }
+
+        .info-box div h3 {
+            color: #00bfff; /* Light blue for headings */
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 191, 255, 0.3); /* Light blue glow effect */
+        }
+
+        .info-box div p {
+            color: #cccccc; /* Light gray for readability */
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Card Icons */
+        .info-box div::before {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .info-box div:nth-child(1)::before {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs8YcRjYItVQsoQzfjiE1xaI1_YDbLMCTULA&s')
+        }
+
+        .info-box div:nth-child(2)::before {
+            background-image: url('https://img.icons8.com/color/96/000000/network.png'); /* Network icon */
+        }
+
+        .info-box div:nth-child(3)::before {
+            background-image: url('https://img.icons8.com/color/96/000000/shield.png'); /* Shield icon */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .info-box {
+                flex-direction: column;
+            }
+
+            .info-box div {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .section p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Intrusion Attacks Explained</h1>
+        
+        <img src="https://www.hbs.net/wp-content/uploads/2024/01/Blog_Feature_Feb_Wk2_Pratum_20220112_RXX.jpeg" alt="Intrusion Diagram">
+        
+        <div class="section">
+            <h2>What is an Intrusion Attack?</h2>
+            <p>An intrusion attack occurs when an unauthorized individual gains access to a system, network, or data, often with malicious intent such as stealing information, disrupting services, or causing damage.</p>
+        </div>
+
+        <div class="info-box">
+            <div>
+                <h3>Unauthorized Access</h3>
+                <p>Attackers exploit vulnerabilities to gain unauthorized access to systems or networks.</p>
+            </div>
+            
+            <div>
+                <h3>Exploitation</h3>
+                <p>Once inside, attackers may steal data, install malware, or disrupt operations.</p>
+            </div>
+
+            <div>
+                <h3>Security Breach</h3>
+                <p>The attack compromises the integrity, confidentiality, or availability of the system.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

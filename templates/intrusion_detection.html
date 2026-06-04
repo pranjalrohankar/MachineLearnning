@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrusion Detection System</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(15, 29, 121);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #d1d1d1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            width: 600px;
+            padding: 30px;
+            background-color: rgba(19, 6, 19, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #30089e;
+            border-radius: 6px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: rgba(16, 18, 145, 0.8);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-container button:hover {
+            background-color: #9a97d7;
+        }
+
+        #result-card {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #result-card.safe {
+            background-color: rgba(200, 255, 200, 0.9);
+            color: #228B22;
+        }
+
+        #result-card.intrusion {
+            background-color: rgba(255, 200, 200, 0.9);
+            color: #B22222;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        /* Flex container to position both cards side by side */
+    .main-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        margin-top: 50px;
+        flex-wrap: wrap; /* Ensures responsiveness on smaller screens */
+    }
+
+    /* Upload card container */
+    .upload-container {
+        width: 600px;
+        text-align: center;
+    }
+
+    /* Card for file upload */
+    .upload-card {
+        background-color: rgba(19, 6, 19, 0.9);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        max-width: 900px;
+        height: 600px;
+        margin: auto;
+    }
+
+    /* Hide default file input */
+    #file-input {
+        display: none;
+    }
+
+    /* Custom file upload button */
+    .custom-file-upload {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        margin-top: 20px;
+        background: linear-gradient(145deg, #4e54c8, #8f94fb);
+        border-radius: 10px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    /* Added spacing between input and button */
+.upload-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Adds gap between input field and button */
+    align-items: center;
+}
+
+/* Upload message styling */
+#upload-message {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00FF00; /* Green success message */
+}
+    .custom-file-upload:hover {
+        transform: scale(1.05);
+        box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    /* 3D animation for upload button */
+    .upload-btn {
+        width: 80%;
+        padding: 12px;
+        margin-top: 60px;
+        font-size: 18px;
+        font-weight: bold;
+        background: linear-gradient(145deg, #ff416c, #ff4b2b);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .upload-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .upload-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .main-wrapper {
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-container, .upload-container {
+            width: 90%;
+        }
+    }
+   
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- Intrusion Detection Card -->
+        <div class="main-container">
+            <h1>Intrusion Detection System</h1>
+            <div class="form-container">
+                <form id="intrusion-form">
+                    <div class="form-group">
+                        <label>Duration:</label>
+                        <input type="number" id="duration" name="duration" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Source Bytes:</label>
+                        <input type="number" id="src_bytes" name="src_bytes" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Destination Bytes:</label>
+                        <input type="number" id="dst_bytes" name="dst_bytes" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Connection Count:</label>
+                        <input type="number" id="count" name="count" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Connection Count:</label>
+                        <input type="number" id="srv_count" name="srv_count" required>
+                    </div>
+                    <div class="form-group">
+                        <label>SError Rate:</label>
+                        <input type="number" id="serror_rate" name="serror_rate" step="0.01" required>
+                    </div>
+                    <button type="submit">Detect Intrusion</button>
+                </form>
+            </div>
+            <div id="loading">Loading...</div>
+            <div id="result-card">
+                <h3 id="result-title">Prediction Result</h3>
+                <p id="prediction"></p>
+            </div>
+        </div>
+    
+        <!-- File Upload Card -->
+        <div class="upload-container">
+            <h3>Upload ARFF File</h3>
+            <div class="upload-card">
+                <form id="upload-form">
+                    <label for="file-input" class="custom-file-upload">Choose File</label>
+                    <input type="file" id="file-input" />
+                    <button type="submit" class="upload-btn">Upload</button>
+                </form>
+                <p id="upload-result"></p>
+                <img id="result-graph" style="display:none; max-width:100%; border:1px solid #ccc; border-radius:10px;" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle file upload
+        document.getElementById("upload-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const fileInput = document.getElementById("file-input").files[0];
+
+    if (!fileInput) {
+        alert("Please select a file.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput);
+
+    const response = await fetch("/upload", { method: "POST", body: formData });
+    const result = await response.json();
+
+    if (result.graph) {
+        document.getElementById("result-graph").src = "data:image/png;base64," + result.graph;
+        document.getElementById("result-graph").style.display = "block";
+        document.getElementById("upload-message").innerText = "✅ File uploaded successfully!";
+    } else {
+        document.getElementById("upload-message").innerText = "❌ Error processing file.";
+    }
+});
+
+
+        // Handle intrusion detection form submission
+        document.getElementById("intrusion-form").onsubmit = async function(event) {
+            event.preventDefault();
+            
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("result-card").style.display = "none";
+
+            let formData = new FormData(event.target);
+            let jsonData = {};
+
+            // Convert all values to numbers before sending
+            formData.forEach((value, key) => {
+                jsonData[key] = isNaN(value) ? value : Number(value);
+            });
+
+            try {
+                let response = await fetch("/detect_intrusion", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(jsonData)
+                });
+
+                let result = await response.json();
+                document.getElementById("loading").style.display = "none";
+
+                if (result.status === "success") {
+                    document.getElementById("result-card").style.display = "block";
+                    if (result.prediction !== "Normal") {
+                        document.getElementById("result-card").className = "intrusion";
+                        document.getElementById("result-title").innerText = "Intrusion Detected!";
+                        document.getElementById("prediction").innerHTML = `Attack Type: <strong>${result.prediction}</strong>`;
+                    } else {
+                        document.getElementById("result-card").className = "safe";
+                        document.getElementById("result-title").innerText = "No Intrusion Detected.";
+                        document.getElementById("prediction").innerText = "The network is safe.";
+                    }
+                } else {
+                    document.getElementById("result-card").style.display = "block";
+                    document.getElementById("result-title").innerText = "Error";
+                    document.getElementById("prediction").innerText = result.error;
+                }
+            } catch (error) {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("result-card").style.display = "block";
+                document.getElementById("result-title").innerText = "Error";
+                document.getElementById("prediction").innerText = `Error: ${error.message}`;
+            }
+        };
+    </script>
+</body>
+</html>

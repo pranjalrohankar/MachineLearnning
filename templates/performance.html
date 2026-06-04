@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Detection Models</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        h1, h2, h3 {
+            color: #1a1a1a;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .chart-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 35px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        #accuracyChart {
+            width: 100% !important;
+            height: 600px !important;
+            margin: 0 auto;
+        }
+        
+        .model-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .model-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .model-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+            font-weight: 700;
+            font-size: 1.4em;
+        }
+        
+        .accuracy {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        
+        .high-accuracy {
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .medium-accuracy {
+            color: #f39c12;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .low-accuracy {
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .description {
+            color: #555;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+        
+        .detection-type {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .detection-type:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 5px;
+            height: 70%;
+            width: 5px;
+            background: linear-gradient(to bottom, #3498db, #2ecc71);
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .model-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                padding: 15px;
+            }
+            
+            #accuracyChart {
+                height: 450px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Security Threat Detection Models</h1>
+        <p>Comprehensive overview of our machine learning models for detecting security threats</p>
+    </div>
+    
+    <div class="chart-container">
+        <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 20px;">Model Accuracy Comparison</h2>
+        <canvas id="accuracyChart"></canvas>
+    </div>
+    
+    <h2 style="color: #2c3e50; margin-bottom: 20px;">Detection Models</h2>
+    
+    <div class="detection-type">Phishing Detection</div>
+    <div class="model-container">
+        <div class="model-card">
+            <h3>Gradient Boosting</h3>
+            <div class="accuracy high-accuracy">Accuracy: {{ model_accuracies['Phishing Detection - Gradient Boosting'] }}%</div>
+            <div class="description">{{ model_descriptions['Phishing Detection - Gradient Boosting'] }}</div>
+        </div>
+    </div>
+    
+    <div class="detection-type">Malware Detection</div>
+    <div class="model-container">
+        <div class="model-card">
+            <h3>Random Forest</h3>
+            <div class="accuracy high-accuracy">Accuracy: {{ model_accuracies['Malware Detection - Random Forest'] }}%</div>
+            <div class="description">{{ model_descriptions['Malware Detection - Random Forest'] }}</div>
+        </div>
+    </div>
+    
+    <div class="detection-type">XSS Detection</div>
+    <div class="model-container">
+        <div class="model-card">
+            <h3>Gradient Boosting</h3>
+            <div class="accuracy high-accuracy">Accuracy: {{ model_accuracies['XSS Detection - Gradient Boosting'] }}%</div>
+            <div class="description">{{ model_descriptions['XSS Detection - Gradient Boosting'] }}</div>
+        </div>
+    </div>
+    
+    <div class="detection-type">DoS Detection</div>
+    <div class="model-container">
+        <div class="model-card">
+            <h3>Gradient Boosting</h3>
+            <div class="accuracy high-accuracy">Accuracy: {{ model_accuracies['DoS Detection - Gradient Boosting'] }}%</div>
+            <div class="description">{{ model_descriptions['DoS Detection - Gradient Boosting'] }}</div>
+        </div>
+        
+        <div class="model-card">
+            <h3>K-Nearest Neighbors (KNN)</h3>
+            <div class="accuracy medium-accuracy">Accuracy: {{ model_accuracies['DoS Detection - KNN'] }}%</div>
+            <div class="description">{{ model_descriptions['DoS Detection - KNN'] }}</div>
+        </div>
+    </div>
+
+    <div class="detection-type">Network Attack Detection</div>
+    <div class="model-container">
+        <div class="model-card">
+            <h3>SYN Flood Detection</h3>
+            <div class="accuracy high-accuracy">Accuracy: {{ model_accuracies['SYN Flood Detection'] }}%</div>
+            <div class="description">Real-time detection of SYN flood attacks by analyzing TCP handshake patterns. High accuracy in identifying malicious traffic spikes.</div>
+        </div>
+        
+        <div class="model-card">
+            <h3>ARP Spoofing Detection</h3>
+            <div class="accuracy medium-accuracy">Accuracy: {{ model_accuracies['ARP Spoofing Detection'] }}%</div>
+            <div class="description">Detects ARP cache poisoning attacks by monitoring network traffic for suspicious ARP packets and MAC address anomalies.</div>
+        </div>
+        
+        <div class="model-card">
+            <h3>Port Scan Detection</h3>
+            <div class="accuracy medium-accuracy">Accuracy: {{ model_accuracies['Port Scan Detection'] }}%</div>
+            <div class="description">Identifies port scanning activities by analyzing connection patterns, packet rates, and target port distributions.</div>
+        </div>
+    </div>
+
+    <script>
+        // Updated model data with all detection systems
+        const modelData = {
+            names: [
+                'Phishing (GB)',
+                'Malware (RF)',
+                'XSS (GB)',
+                'DoS (GB)',
+                'DoS (KNN)',
+                'SYN Flood',
+                'ARP Spoof',
+                'Port Scan'
+            ],
+            accuracies: [
+                parseFloat("{{ model_accuracies['Phishing Detection - Gradient Boosting'] }}"),
+                parseFloat("{{ model_accuracies['Malware Detection - Random Forest'] }}"),
+                parseFloat("{{ model_accuracies['XSS Detection - Gradient Boosting'] }}"),
+                parseFloat("{{ model_accuracies['DoS Detection - Gradient Boosting'] }}"),
+                parseFloat("{{ model_accuracies['DoS Detection - KNN'] }}"),
+                parseFloat("{{ model_accuracies['SYN Flood Detection'] }}"),
+                parseFloat("{{ model_accuracies['ARP Spoofing Detection'] }}"),
+                parseFloat("{{ model_accuracies['Port Scan Detection'] }}")
+            ]
+        };
+
+        // Color scheme with accuracy level indicators
+        const backgroundColors = [
+    'rgba(52, 152, 219, 0.85)',   // Phishing (GB) - Blue
+    'rgba(46, 204, 113, 0.85)',   // Malware (RF) - Green
+    'rgba(155, 89, 182, 0.85)',   // XSS (GB) - Purple
+    'rgba(241, 196, 15, 0.85)',   // DoS (GB) - Yellow
+    'rgba(230, 126, 34, 0.85)',   // DoS (KNN) - Orange
+    'rgba(231, 76, 60, 0.85)',    // SYN Flood - Red
+    'rgba(26, 188, 156, 0.85)',   // ARP Spoof - Teal
+    'rgba(149, 165, 166, 0.85)'   // Port Scan - Gray
+];
+
+        
+        // Create the chart
+        document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('accuracyChart').getContext('2d');
+    const accuracyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: modelData.names,
+            datasets: [{
+                label: 'Accuracy (%)',
+                data: modelData.accuracies,
+                backgroundColor: backgroundColors,
+                borderColor: backgroundColors.map(color => color.replace('0.85', '1')),
+                borderWidth: 2,
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Accuracy (%)',
+                        font: {
+                            weight: 'bold',
+                            size: 18,
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        color: '#000000'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 16
+                        },
+                        color: '#000000',
+                        padding: 10
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.2)',
+                        lineWidth: 1
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Detection Models',
+                        font: {
+                            weight: 'bold',
+                            size: 18,
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        color: '#000000',
+                        padding: {top: 20}
+                    },
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45,
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        color: '#000000',
+                        padding: 10
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}%`;
+                        },
+                        afterLabel: function(context) {
+                            const modelName = context.label;
+                            if (modelName === 'ARP Spoof') {
+                                return 'Note: Performance depends on network conditions';
+                            }
+                            return '';
+                        }
+                    },
+                    titleFont: {
+                        weight: 'bold',
+                        size: 16
+                    },
+                    bodyFont: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    padding: 12,
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    footerColor: '#eee',
+                    borderColor: '#000000',
+                    borderWidth: 2,
+                    cornerRadius: 8
+                },
+                legend: {
+                    display: false
+                }
+            },
+            animation: {
+                duration: 1200,
+                easing: 'easeOutQuart'
+            },
+            barPercentage: 0.7,
+            categoryPercentage: 0.8
+        }
+    });
+});
+    </script>
+</body>
+</html>

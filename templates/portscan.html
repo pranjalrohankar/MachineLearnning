@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scan Detection Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a5acd;
+            --primary-dark: #483d8b;
+            --secondary: #7b68ee;
+            --danger: #ff6b6b;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --dark: #1a1a4a;
+            --light: #f8f9fa;
+            --gray: #b8c1ff;
+            --gray-light: #3a3a6a;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0815ad 0%, #8282e0 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(25, 20, 50, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(90, 70, 180, 0.3);
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
+        
+        h1 {
+            color: var(--gray);
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 i {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            box-shadow: 0 4px 8px rgba(106, 90, 205, 0.3);
+        }
+        
+        h2 {
+            color: var(--gray);
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 i {
+            width: 30px;
+            height: 30px;
+            background: rgba(106, 90, 205, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .control-panel {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        #startBtn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        #startBtn:hover {
+            background: linear-gradient(135deg, var(--secondary) 0%, #5a4fcf 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        #stopBtn {
+            background: linear-gradient(135deg, var(--danger) 0%, #e53e3e 100%);
+            color: white;
+            display: none;
+        }
+        
+        #stopBtn:hover {
+            background: linear-gradient(135deg, #ff8c8c 0%, var(--danger) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(247, 37, 133, 0.3);
+        }
+        
+        select {
+            padding: 12px 16px;
+            border-radius: 8px;
+            min-width: 220px;
+            border: 1px solid var(--gray-light);
+            background: rgba(30, 25, 60, 0.8);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            appearance: none;
+            color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8c1ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
+        }
+        
+        .panel {
+            background: rgba(25, 20, 50, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(90, 70, 180, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .panel:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .alert {
+            border-left: 4px solid var(--danger);
+            padding: 18px;
+            margin-bottom: 18px;
+            background: rgba(40, 35, 80, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--danger);
+        }
+        
+        .alert:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .alert h3 {
+            color: var(--gray);
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert p {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .alert strong {
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .status-active {
+            color: var(--success);
+            font-weight: 600;
+            padding: 4px 10px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-active::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .status-inactive {
+            color: var(--danger);
+            font-weight: 600;
+            padding: 4px 10px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-inactive::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .stat-item {
+            margin-bottom: 24px;
+        }
+        
+        .stat-item p {
+            margin: 12px 0;
+            font-size: 15px;
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-value {
+    font-size: 36px;
+    margin: 12px 0;
+    font-weight: 700;
+    /* Gradient text with full browser support */
+    background: linear-gradient(to right, var(--primary), var(--success));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* Fallback for browsers that don't support text-fill-color */
+    
+    /* Fallback for browsers that don't support gradient text */
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+        color: var(--primary); /* Solid color fallback */
+    }
+}
+        
+        #alertsContainer {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        /* Custom scrollbar */
+        #alertsContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #alertsContainer::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 4px;
+        }
+        
+        #alertsContainer::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        #alertsContainer::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .confidence-high {
+            background-color: var(--danger);
+        }
+        
+        .confidence-medium {
+            background-color: var(--warning);
+        }
+        
+        .confidence-low {
+            background-color: var(--success);
+        }
+        
+        /* Pulse animation for active monitoring */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 201, 240, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .control-panel {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Port Scan Detection Dashboard</h1>
+            <div class="control-panel">
+                <button id="startBtn"><i class="fas fa-play"></i> Start Monitoring</button>
+                <button id="stopBtn"><i class="fas fa-stop"></i> Stop Monitoring</button>
+                <select id="interfaceSelect">
+                    <option value="">Select Network Interface</option>
+                </select>
+            </div>
+        </header>
+        
+        <div class="dashboard">
+            <div class="panel">
+                <h2><i class="fas fa-bell"></i> Security Alerts <span class="badge" id="alertCount">0</span></h2>
+                <div id="alertsContainer"></div>
+            </div>
+            
+            <div class="panel">
+                <h2><i class="fas fa-chart-line"></i> Monitoring Status</h2>
+                <div class="stat-item">
+                    <p><i class="fas fa-circle"></i> Status: <span id="monitoringStatus" class="status-inactive">Inactive</span></p>
+                    <p><i class="fas fa-network-wired"></i> Interface: <span id="currentInterface">-</span></p>
+                    <p><i class="fas fa-exclamation-triangle"></i> Total Alerts: <span id="totalAlerts" class="stat-value">0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const interfaceSelect = document.getElementById('interfaceSelect');
+        const alertsContainer = document.getElementById('alertsContainer');
+        const alertCount = document.getElementById('alertCount');
+        const monitoringStatus = document.getElementById('monitoringStatus');
+        const currentInterface = document.getElementById('currentInterface');
+        const totalAlerts = document.getElementById('totalAlerts');
+        
+        let updateInterval;
+
+        // Load available network interfaces
+        async function loadInterfaces() {
+            try {
+                const response = await fetch('/api/interfaces');
+                const interfaces = await response.json();
+                interfaceSelect.innerHTML = '<option value="">Select Network Interface</option>' + 
+                    interfaces.map(iface => `<option value="${iface}">${iface}</option>`).join('');
+            } catch (error) {
+                console.error("Error loading interfaces:", error);
+                showError("Failed to load network interfaces");
+            }
+        }
+
+        // Fetch alerts from backend
+        async function fetchAlerts() {
+            try {
+                const response = await fetch('/api/alerts');
+                const alerts = await response.json();
+                renderAlerts(alerts);
+                
+                // Update status
+                const statusResponse = await fetch('/api/status');
+                const status = await statusResponse.json();
+                updateStatus(status);
+            } catch (error) {
+                console.error("Error fetching alerts:", error);
+                showError("Failed to fetch alerts");
+            }
+        }
+
+        // Render alerts to the UI
+        function renderAlerts(alerts) {
+            alertCount.textContent = alerts.length;
+            totalAlerts.textContent = alerts.length;
+            
+            alertsContainer.innerHTML = alerts.map(alert => {
+                const confidence = Math.round(alert.probability * 100);
+                let confidenceClass = 'confidence-low';
+                if (confidence > 80) confidenceClass = 'confidence-high';
+                else if (confidence > 50) confidenceClass = 'confidence-medium';
+                
+                return `
+                <div class="alert">
+                    <h3><i class="fas fa-clock"></i> ${alert.timestamp}</h3>
+                    <p><strong><i class="fas fa-laptop"></i> Source:</strong> ${alert.source_ip || 'Unknown'}</p>
+                    <p><strong><i class="fas fa-server"></i> Target:</strong> ${alert.target_ip || 'Unknown'}</p>
+                    <p><strong><i class="fas fa-exchange-alt"></i> Connections:</strong> ${alert.connection_count || '0'}</p>
+                    <p><strong><i class="fas fa-chart-bar"></i> Confidence:</strong> 
+                        <span class="badge ${confidenceClass}">${confidence}%</span>
+                    </p>
+                    <p><strong><i class="fas fa-plug"></i> Interface:</strong> ${alert.interface || 'N/A'}</p>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Update monitoring status
+        function updateStatus(status) {
+            if (status.active) {
+                monitoringStatus.textContent = "Active";
+                monitoringStatus.className = "status-active";
+                currentInterface.textContent = status.interface || '-';
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'flex';
+                interfaceSelect.disabled = true;
+                startBtn.classList.remove('pulse');
+                stopBtn.classList.add('pulse');
+            } else {
+                monitoringStatus.textContent = "Inactive";
+                monitoringStatus.className = "status-inactive";
+                currentInterface.textContent = "-";
+                startBtn.style.display = 'flex';
+                stopBtn.style.display = 'none';
+                interfaceSelect.disabled = false;
+                startBtn.classList.add('pulse');
+                stopBtn.classList.remove('pulse');
+            }
+        }
+
+        // Start monitoring
+        async function startMonitoring() {
+            const interface = interfaceSelect.value;
+            if (!interface) {
+                showError("Please select a network interface");
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/start_monitoring?interface=${encodeURIComponent(interface)}`);
+                if (response.ok) {
+                    updateInterval = setInterval(fetchAlerts, 2000);
+                    showSuccess("Monitoring started successfully");
+                } else {
+                    showError("Failed to start monitoring");
+                }
+            } catch (error) {
+                console.error("Error starting monitoring:", error);
+                showError("Failed to start monitoring");
+            }
+        }
+
+        // Stop monitoring
+        async function stopMonitoring() {
+            try {
+                await fetch('/api/stop_monitoring');
+                clearInterval(updateInterval);
+                showSuccess("Monitoring stopped successfully");
+            } catch (error) {
+                console.error("Error stopping monitoring:", error);
+                showError("Failed to stop monitoring");
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.innerHTML = `<h3><i class="fas fa-exclamation-circle"></i> Error</h3><p>${message}</p>`;
+            alertsContainer.prepend(alert);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.style.borderLeftColor = '#4cc9f0';
+            alert.innerHTML = `<h3><i class="fas fa-check-circle"></i> Success</h3><p>${message}</p>`;
+            alertsContainer.prepend(alert);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startMonitoring);
+        stopBtn.addEventListener('click', stopMonitoring);
+
+        // Initialize
+        loadInterfaces();
+        fetchAlerts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #5c8cdf;
+        }
+        .chat-container {
+            width: 700px;
+            background: rgb(14, 4, 54);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.879);
+        }
+        .chat-box {
+            height: 500px;
+            border: 1px solid #4949a7;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+            color: #f2f3f8;
+        }
+        .bot-message {
+            text-align: left;
+            color: #fafafb;
+        }
+        .bot-message ul {
+            margin: 0;
+            padding-left: 20px;
+            list-style-type: disc; /* Use disc for bullet points */
+        }
+        .bot-message ul li {
+            margin-bottom: 5px; /* Reduce spacing between list items */
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column; /* Stack input and button vertically */
+            align-items: center; /* Center items horizontally */
+            gap: 10px; /* Add spacing between input and button */
+        }
+        input[type="text"] {
+            width: 100%; /* Full width of the container */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100px;
+            padding: 10px;
+            background-color: #2991fa; /* Green color for the button */
+            color: white; /* White text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth hover effect */
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (!userInput) return;
+
+            // Add user message to the chat box
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="message user-message">You: ${userInput}</div>`;
+
+            // Clear the input field
+            document.getElementById('user-input').value = '';
+
+            // Send the message to the Flask backend
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userInput }),
+                });
+
+                const data = await response.json();
+                if (data.response) {
+                    // Format the bot's response
+                    const formattedResponse = formatResponse(data.response);
+                    // Add bot response to the chat box
+                    chatBox.innerHTML += `<div class="message bot-message">Bot: ${formattedResponse}</div>`;
+                } else {
+                    chatBox.innerHTML += `<div class="message bot-message">Bot: Error: ${data.error || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                chatBox.innerHTML += `<div class="message bot-message">Bot: Failed to fetch response.</div>`;
+            }
+
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function formatResponse(response) {
+            // Replace newlines with <br> tags
+            response = response.replace(/\n/g, '<br>');
+
+            // Format lists (e.g., bullet points)
+            response = response.replace(/\*\s*(.*?)\s*\*/g, '<ul><li>$1</li></ul>');
+
+            // Handle nested lists (e.g., sub-points)
+            response = response.replace(/\-\s*(.*?)\s*\-/g, '<ul><li>$1</li></ul>');
+
+            return response;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Phishing Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1d79, #1a0a1a);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: rgba(25, 10, 25, 0.8);
+            padding: 15px 30px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .main-content {
+            max-width: 900px;
+            margin: 100px auto 60px;
+            padding: 40px;
+            background-color: rgba(25, 10, 25, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            flex-grow: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .detection-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            transition: border-color 0.3s;
+            background-color: #f8f8f8;
+        }
+        input[type="text"]:focus {
+            border-color: #4a6bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        }
+        button {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #4a6bff, #2a4bcc);
+            border: none;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background: linear-gradient(135deg, #3a5bef, #1a3bbc);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .popup-card {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffffff, #f8f8f8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+            max-width: 600px;
+            width: 90%;
+        }
+        .popup-card h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .popup-card p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .popup-card button {
+            margin-top: 25px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4a6bff, #2a4bcc);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: auto;
+            display: inline-block;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        .danger {
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            color: white;
+        }
+        .safe {
+            background: linear-gradient(135deg, #00cc66, #00994d);
+            color: white;
+        }
+        .warning {
+            background: linear-gradient(135deg, #ff9933, #cc6600);
+            color: white;
+        }
+        .icon {
+            font-size: 60px;
+            margin-bottom: 25px;
+        }
+        .confidence-meter {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .confidence-level {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .danger .confidence-level {
+            background: linear-gradient(90deg, #ff0000, #cc0000);
+        }
+        .safe .confidence-level {
+            background: linear-gradient(90deg, #00cc00, #009900);
+        }
+        .warning .confidence-level {
+            background: linear-gradient(90deg, #ff9900, #cc6600);
+        }
+        .features {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        .features h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .features ul {
+            list-style-type: none;
+        }
+        .features li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 25px;
+        }
+        .features li:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(25, 10, 25, 0.8);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid #4a6bff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">PhishGuard Pro</div>
+    </div>
+
+    <div class="main-content">
+        <h1>Advanced Phishing Detection</h1>
+        <div class="detection-container">
+            <div class="input-group">
+                <label for="urlInput">Enter Website URL to Analyze:</label>
+                <input type="text" id="urlInput" placeholder="https://example.com">
+                <p class="info-text">We analyze multiple factors including domain age, SSL certificates, and suspicious patterns</p>
+            </div>
+            
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Analyzing URL for phishing indicators...</p>
+            </div>
+            
+            <button onclick="checkPhishing()">Analyze URL</button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+    <div id="popupCard" class="popup-card"></div>
+
+    <footer>
+        &copy; 2025 PhishGuard Pro | Advanced Phishing Detection System | All Rights Reserved
+    </footer>
+
+    <script>
+        async function checkPhishing() {
+            const urlInput = document.getElementById('urlInput').value.trim();
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const popupCard = document.getElementById('popupCard');
+            const overlay = document.getElementById('overlay');
+
+            if (!urlInput) {
+                showPopup("Please enter a URL", "warning");
+                return;
+            }
+
+            // Validate URL format
+            if (!isValidUrl(urlInput)) {
+                showPopup("Please enter a valid URL (e.g., https://example.com)", "warning");
+                return;
+            }
+
+            // Show loading indicator
+            loadingIndicator.style.display = "block";
+
+            try {
+                // Simulate API call with enhanced detection logic
+                const result = await simulateAdvancedDetection(urlInput);
+                
+                // Display results
+                displayResults(urlInput, result);
+                
+            } catch (error) {
+                showPopup("Error occurred while analyzing the URL. Please try again.", "warning");
+                console.error("Detection error:", error);
+            } finally {
+                loadingIndicator.style.display = "none";
+            }
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function showPopup(message, type = "warning") {
+            const popupCard = document.getElementById('popupCard');
+            const overlay = document.getElementById('overlay');
+            
+            popupCard.innerHTML = `
+                <div class="icon">${type === "danger" ? "⚠️" : type === "safe" ? "✅" : "❓"}</div>
+                <h2>${type === "danger" ? "Phishing Detected!" : type === "safe" ? "Safe Website" : "Warning"}</h2>
+                <p>${message}</p>
+                <button onclick="closePopup()">Close</button>
+            `;
+            
+            popupCard.className = `popup-card ${type}`;
+            overlay.style.display = "block";
+            popupCard.style.display = "block";
+        }
+
+        function closePopup() {
+            const popupCard = document.getElementById('popupCard');
+            const overlay = document.getElementById('overlay');
+            popupCard.style.display = "none";
+            overlay.style.display = "none";
+        }
+
+        // Simulated advanced detection logic
+        async function simulateAdvancedDetection(url) {
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Extract domain for analysis
+            const domain = new URL(url).hostname;
+            
+            // Enhanced detection features
+            const features = {
+                hasHttps: url.startsWith('https://'),
+                domainAge: getRandomInt(0, 3650), // days
+                suspiciousKeywords: checkSuspiciousKeywords(url),
+                unusualCharacters: checkUnusualCharacters(domain),
+                knownPhishingDomain: checkKnownPhishingDomains(domain),
+                subdomainCount: (domain.match(/\./g) || []).length - 1,
+                isShortenedUrl: checkShortenedUrl(url),
+                hasLoginForm: Math.random() > 0.7
+            };
+            
+            // Calculate risk score (0-100)
+            let riskScore = 0;
+            
+            // Negative factors (increase risk)
+            if (!features.hasHttps) riskScore += 20;
+            if (features.domainAge < 30) riskScore += 15;
+            if (features.suspiciousKeywords) riskScore += 25;
+            if (features.unusualCharacters) riskScore += 20;
+            if (features.knownPhishingDomain) riskScore += 30;
+            if (features.subdomainCount > 2) riskScore += 10;
+            if (features.isShortenedUrl) riskScore += 15;
+            if (features.hasLoginForm) riskScore += 10;
+            
+            // Cap at 100
+            riskScore = Math.min(100, riskScore);
+            
+            // Determine result
+            let result;
+            if (riskScore > 70) {
+                result = { status: "Phishing", confidence: riskScore, features };
+            } else if (riskScore > 30) {
+                result = { status: "Suspicious", confidence: riskScore, features };
+            } else {
+                result = { status: "Legitimate", confidence: 100 - riskScore, features };
+            }
+            
+            return result;
+        }
+        
+        // Helper functions for detection features
+        function checkSuspiciousKeywords(url) {
+            const keywords = ['login', 'account', 'verify', 'secure', 'bank', 'paypal', 'ebay', 'amazon'];
+            return keywords.some(keyword => url.toLowerCase().includes(keyword));
+        }
+        
+        function checkUnusualCharacters(domain) {
+            return /[^a-zA-Z0-9.-]/.test(domain) || 
+                   /(\d{2,}|[a-zA-Z]{10,})/.test(domain);
+        }
+        
+        function checkKnownPhishingDomains(domain) {
+            // In a real implementation, this would check against a database
+            const knownPhishing = ['phishingsite.com', 'scam-website.org', 'fake-login.net'];
+            return knownPhishing.includes(domain);
+        }
+        
+        function checkShortenedUrl(url) {
+            const shorteners = ['bit.ly', 'goo.gl', 'tinyurl.com', 'ow.ly'];
+            return shorteners.some(shortener => url.includes(shortener));
+        }
+        
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        // Display results with detailed analysis
+        function displayResults(url, result) {
+            const popupCard = document.getElementById('popupCard');
+            const overlay = document.getElementById('overlay');
+            
+            // Determine popup type
+            let popupType = "warning";
+            let icon = "❓";
+            let title = "Suspicious Website";
+            
+            if (result.status === "Phishing") {
+                popupType = "danger";
+                icon = "⚠️";
+                title = "Phishing Detected!";
+            } else if (result.status === "Legitimate") {
+                popupType = "safe";
+                icon = "✅";
+                title = "Safe Website";
+            }
+            
+            // Generate features list
+            const featuresList = Object.entries(result.features)
+                .map(([key, value]) => {
+                    const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    return `<li><strong>${formattedKey}:</strong> ${typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}</li>`;
+                })
+                .join('');
+            
+            popupCard.innerHTML = `
+                <div class="icon">${icon}</div>
+                <h2>${title}</h2>
+                <p><strong>URL:</strong> ${url}</p>
+                <p><strong>Status:</strong> ${result.status}</p>
+                
+                <div class="confidence-meter">
+                    <div class="confidence-level" style="width: ${result.confidence}%"></div>
+                </div>
+                <p>Confidence: ${result.confidence}%</p>
+                
+                <div class="features">
+                    <h3>Analysis Details:</h3>
+                    <ul>${featuresList}</ul>
+                </div>
+                
+                <button onclick="closePopup()">Close</button>
+            `;
+            
+            popupCard.className = `popup-card ${popupType}`;
+            overlay.style.display = "block";
+            popupCard.style.display = "block";
+        }
+    </script>
+</body>
+</html>

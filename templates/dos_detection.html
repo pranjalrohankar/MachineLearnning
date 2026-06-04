@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoS Attack Detection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(15, 29, 121);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #d1d1d1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: rgba(19, 6, 19, 0.6);
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .home-btn {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .navbar .dropdown select {
+            background-color: rgba(28, 18, 168, 0.6);
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .main-content {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 60px;
+            background-color: rgba(19, 6, 19, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+        .dos-input {
+            background-color: #f9f9f9;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .dos-input label {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .inputs-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .input-column {
+            flex: 1 1 30%;
+            min-width: 200px;
+        }
+        .dos-input input, .dos-input select {
+            margin-bottom: 10px;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            min-height: 50px;
+        }
+        .dos-input button {
+            padding: 15px 30px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 30%;
+            margin-top: 20px;
+        }
+        .dos-input button:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+        .result {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: rgb(171, 42, 42);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            color: #333;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+        .modal-content p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .modal-content button:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+        /* Add styles for icons */
+        .icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        .safe {
+            color: green;
+        }
+        .danger {
+            color: red;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(178, 71, 71, 0.1);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+    function predict_dos() {
+        // Validate required fields
+        if (!document.getElementById('protocol').value || 
+            !document.getElementById('service').value || 
+            !document.getElementById('flag').value) {
+            document.getElementById('result').innerHTML = "<p class='error'>Please fill in all required fields</p>";
+            return;
+        }
+
+        var formData = {
+            protocol: document.getElementById('protocol').value,
+            service: document.getElementById('service').value,
+            flag: document.getElementById('flag').value,
+            src_bytes: parseFloat(document.getElementById('src_bytes').value) || 0,
+            dst_bytes: parseFloat(document.getElementById('dst_bytes').value) || 0,
+            land: parseInt(document.getElementById('land').value) || 0,
+            wrong_fragment: parseInt(document.getElementById('wrong_fragment').value) || 0,
+            urgent: parseInt(document.getElementById('urgent').value) || 0,
+            hot: parseInt(document.getElementById('hot').value) || 0,
+            num_failed_logins: parseInt(document.getElementById('num_failed_logins').value) || 0,
+            logged_in: parseInt(document.getElementById('logged_in').value) || 0,
+            num_compromised: parseInt(document.getElementById('num_compromised').value) || 0,
+            root_shell: parseInt(document.getElementById('root_shell').value) || 0,
+            su_attempted: parseInt(document.getElementById('su_attempted').value) || 0,
+            num_root: parseInt(document.getElementById('num_root').value) || 0,
+            num_file_creations: parseInt(document.getElementById('num_file_creations').value) || 0
+        };
+
+        $.ajax({
+            url: '/predict_dos',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.status === 'success') {
+                    document.getElementById('modal-result').innerHTML = response.result_html;
+                    document.getElementById('resultModal').style.display = 'block';
+                } else {
+                    document.getElementById('result').innerHTML = "<p class='error'>Prediction failed: " + response.error + "</p>";
+                }
+            },
+            error: function(xhr, status, error) {
+                document.getElementById('result').innerHTML = "<p class='error'>Error: " + error + "</p>";
+            }
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('resultModal').style.display = 'none';
+    }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+       
+    </div>
+
+    <div class="main-content">
+        <h1>DoS Attack Detection</h1>
+        <div class="dos-input">
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="protocol">Protocol:</label>
+                    <input type="text" id="protocol" placeholder="Enter protocol type">
+                </div>
+                <div class="input-column">
+                    <label for="service">Service:</label>
+                    <input type="text" id="service" placeholder="Enter service type">
+                </div>
+                <div class="input-column">
+                    <label for="flag">Flag:</label>
+                    <input type="text" id="flag" placeholder="Enter flag status">
+                </div>
+            </div>
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="src_bytes">Source Bytes:</label>
+                    <input type="number" id="src_bytes" placeholder="Enter source bytes">
+                </div>
+                <div class="input-column">
+                    <label for="dst_bytes">Destination Bytes:</label>
+                    <input type="number" id="dst_bytes" placeholder="Enter destination bytes">
+                </div>
+                <div class="input-column">
+                    <label for="land">Land (0 or 1):</label>
+                    <input type="number" id="land" placeholder="Enter land value (0 or 1)">
+                </div>
+            </div>
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="wrong_fragment">Wrong Fragment:</label>
+                    <input type="number" id="wrong_fragment" placeholder="Enter wrong fragment value">
+                </div>
+                <div class="input-column">
+                    <label for="urgent">Urgent:</label>
+                    <input type="number" id="urgent" placeholder="Enter urgent value">
+                </div>
+                <div class="input-column">
+                    <label for="hot">Hot:</label>
+                    <input type="number" id="hot" placeholder="Enter hot value">
+                </div>
+            </div>
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="num_failed_logins">Number of Failed Logins:</label>
+                    <input type="number" id="num_failed_logins" placeholder="Enter failed logins">
+                </div>
+                <div class="input-column">
+                    <label for="logged_in">Logged In (0 or 1):</label>
+                    <input type="number" id="logged_in" placeholder="Enter login status (0 or 1)">
+                </div>
+                <div class="input-column">
+                    <label for="num_compromised">Number of Compromised:</label>
+                    <input type="number" id="num_compromised" placeholder="Enter compromised value">
+                </div>
+            </div>
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="root_shell">Root Shell:</label>
+                    <input type="number" id="root_shell" placeholder="Enter root shell status (0 or 1)">
+                </div>
+                <div class="input-column">
+                    <label for="su_attempted">SU Attempted:</label>
+                    <input type="number" id="su_attempted" placeholder="Enter su attempted status">
+                </div>
+                <div class="input-column">
+                    <label for="num_root">Number of Root Access:</label>
+                    <input type="number" id="num_root" placeholder="Enter number of root access">
+                </div>
+            </div>
+            <div class="inputs-row">
+                <div class="input-column">
+                    <label for="num_file_creations">Number of File Creations:</label>
+                    <input type="number" id="num_file_creations" placeholder="Enter file creation count">
+                </div>
+            </div>
+
+            <button onclick="predict_dos()">Predict</button>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Modal for displaying the result -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <h2>Prediction Result</h2>
+            <div id="modal-result"></div>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Attack Detection Website | All Rights Reserved
+    </footer>
+</body>
+</html>

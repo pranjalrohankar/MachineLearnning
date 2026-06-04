@@ -1,0 +1,692 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malware Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(15, 29, 121);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #d1d1d1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        .card {
+            background-color: rgba(19, 6, 19, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 80%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            resize: none;
+        }
+        button {
+            padding: 15px 30px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+        .result {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .result h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .result li {
+            font-size: 18px;
+            text-align: left;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .malware-item {
+            color: #FF5252;
+        }
+        .attack-item {
+            color: #FFC107;
+        }
+        .normal-item {
+            color: #4CAF50;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            padding: 15px;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.3);
+            min-width: 150px;
+        }
+        #fileChart {
+            margin-top: 20px;
+            max-width: 100%;
+            align-self: center;
+            margin-left: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        /* Add this to your existing CSS */
+#chartContainer {
+    margin: 20px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#chartImage {
+    max-width: 100%;
+    height: auto;
+    display: none;
+    margin: 0 auto; /* This centers the image */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* Loading Spinner */
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Alert Boxes */
+.alert {
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+.alert-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+/* Result Grid */
+.result-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 10px 15px;
+    margin-top: 15px;
+}
+.result-label {
+    font-weight: bold;
+}
+
+/* Error Display */
+.error {
+    padding: 15px;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    color: #721c24;
+}
+.encoding-help {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-left: 3px solid #6c757d;
+}
+.example {
+    font-family: monospace;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+/* Buttons */
+.retry-btn, .btn-details {
+    padding: 8px 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.retry-btn {
+    background: #007bff;
+    color: white;
+}
+.btn-details {
+    background: #6c757d;
+    color: white;
+}
+/* Add these styles to differentiate attack types */
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.result-icon {
+    font-size: 24px;
+}
+
+.indicators {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Upload Malware Dataset for Detection</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="file" required>
+            <button type="submit">Upload and Predict</button>
+        </form>
+        
+        <!-- Results Container -->
+        <div class="result" id="fileResult"></div>
+        
+        <!-- Chart Container -->
+        <div id="chartContainer" style="margin-top: 20px; text-align: center;">
+            <img id="chartImage" style="max-width: 100%; height: auto; display: none;">
+        </div>
+    </div>
+
+    <!-- Packet Data Entry Card -->
+    <div class="card">
+        <h2>Enter Packet Data for Malware Detection</h2>
+        <textarea id="packetInput" rows="4" placeholder="Enter packet details as a full row..."></textarea>
+        <button id="detectPacket">Detect Malware</button>
+        <div class="result" id="packetResult"></div>
+    </div>
+
+    <script>
+        // File Upload Prediction
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            let fileInput = document.getElementById('fileInput');
+            let resultDiv = document.getElementById('fileResult');
+            let chartImage = document.getElementById('chartImage');
+            
+            if (!fileInput.files.length) {
+                resultDiv.innerHTML = "<p style='color:red'>Please select a file.</p>";
+                chartImage.style.display = 'none';
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                resultDiv.innerHTML = "<p>Analyzing file...</p>";
+                chartImage.style.display = 'none';
+                
+                let response = await fetch('/predict_malware', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                let data = await response.json();
+
+                if (!data.success) {
+                    resultDiv.innerHTML = `<p style='color:red'>Error: ${data.error || 'Unknown error'}</p>`;
+                    chartImage.style.display = 'none';
+                    return;
+                }
+
+                // Display the chart if available
+                // In your file upload success handler:
+if (data.chart) {
+    document.getElementById('chartImage').style.display = 'block';
+    document.getElementById('chartImage').src = data.chart;
+    
+    // Ensure the container is visible
+    document.getElementById('chartContainer').style.display = 'flex';
+} else {
+    document.getElementById('chartImage').style.display = 'none';
+    document.getElementById('chartContainer').style.display = 'none';
+}
+                
+                // Display results without model accuracy
+                let resultsHtml = `
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h4>Total Samples</h4>
+                            <p>${data.results.normal + sumObjectValues(data.results.malware) + sumObjectValues(data.results.attacks)}</p>
+                        </div>
+                        <div class="stat-box normal-item">
+                            <h4>Normal</h4>
+                            <p>${data.results.normal}</p>
+                        </div>
+                        <div class="stat-box malware-item">
+                            <h4>Malware</h4>
+                            <p>${sumObjectValues(data.results.malware)}</p>
+                        </div>
+                        <div class="stat-box attack-item">
+                            <h4>Other Attacks</h4>
+                            <p>${sumObjectValues(data.results.attacks)}</p>
+                        </div>
+                    </div>
+                `;
+                
+                resultDiv.innerHTML = resultsHtml;
+
+            } catch (error) {
+                resultDiv.innerHTML = `<p style='color:red'>Error: ${error.message}</p>`;
+                chartImage.style.display = 'none';
+            }
+        });
+
+        // Helper function to sum object values
+        function sumObjectValues(obj) {
+            return Object.values(obj).reduce((a, b) => a + b, 0);
+        }
+
+        // Packet Data Prediction
+        document.getElementById('detectPacket').addEventListener('click', async function() {
+    const packetInput = document.getElementById('packetInput').value.trim();
+    const packetResultDiv = document.getElementById('packetResult');
+
+    // Clear previous results
+    packetResultDiv.innerHTML = '';
+    
+    if (packetInput === "") {
+        packetResultDiv.innerHTML = "<p class='error'>Please enter packet data.</p>";
+        return;
+    }
+
+    // Split and clean values
+    const values = packetInput.split(',').map(v => v.trim());
+    
+    // Validate input length (16 features)
+    if (values.length !== 16) {
+        packetResultDiv.innerHTML = `
+            <div class="error">
+                <h4>Format Error</h4>
+                <p>Required: 16 comma-separated values (3 text + 13 numbers)</p>
+                <div class='encoding-help'>
+                    <p><strong>Example:</strong></p>
+                    <p class='example'>tcp,http,SF,100,200,0,0,0,0,0,1,0,0,0,0,0</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    try {
+        // Show loading state
+        packetResultDiv.innerHTML = `
+            <div class='loading'>
+                <div class='spinner'></div>
+                <p>Analyzing network packet...</p>
+            </div>
+        `;
+
+        // Complete Protocol Encoding (position 0) - All from dataset
+        const protocolEncoding = {
+            'tcp': 0, 
+            'udp': 1, 
+            'icmp': 2,
+            // Additional protocols that might appear
+            'ip': 3, 'ipv6': 4, 'esp': 5, 'ah': 6,
+            'other': 7, 'unknown': 8
+        };
+
+        // Complete Service Encoding (position 1) - All from dataset
+        const serviceEncoding = {
+            // Network Services
+            'http': 0, 'ftp_data': 1, 'private': 2, 'domain_u': 3, 
+            'smtp': 4, 'other': 5, 'eco_i': 6, 'ecr_i': 7,
+            'finger': 8, 'auth': 9, 'telnet': 10, 'ftp': 11,
+            'systat': 12, 'sunrpc': 13, 'uucp_path': 14, 'whois': 15,
+            'domain': 16, 'gopher': 17, 'login': 18, 'imap4': 19,
+            'time': 20, 'nnsp': 21, 'shell': 22, 'printer': 23,
+            'pop_3': 24, 'kshell': 25, 'efs': 26, 'courier': 27,
+            'uucp': 28, 'klogin': 29, 'ssh': 30, 'netstat': 31,
+            'supdup': 32, 'iso_tsap': 33, 'discard': 34, 'exec': 35,
+            'daytime': 36, 'ntp_u': 37, 'rje': 38, 'csnet_ns': 39,
+            'ctf': 40, 'sql_net': 41, 'link': 42, 'name': 43,
+            'mtp': 44, 'bgp': 45, 'IRC': 46, 'Z39_50': 47,
+            'urp_i': 48, 'netbios_ns': 49, 'netbios_dgm': 50, 'netbios_ssn': 51,
+            'vmnet': 52, 'hostnames': 53, 'ldap': 54, 'X11': 55,
+            'http_443': 56, 'nntp': 57, 'tftp_u': 58, 'tim_i': 59,
+            'red_i': 60, 'remote_job': 61, 'pop_2': 62, 'sunrpc': 63,
+            'uucp_path': 64, 'other': 65, 'unknown': 66
+        };
+
+        // Flag Encoding (position 2) - All from dataset
+        const flagEncoding = {
+            'SF': 0,   // Normal SYN/FIN
+            'S0': 1,   // SYN without SYN-ACK
+            'REJ': 2,  // Rejected connection
+            'RSTO': 3, // Connection reset by originator
+            'RSTR': 4, // Connection reset by responder
+            'SH': 5,   // SYN flood attack
+            'S1': 6,   // Connection established (not closed)
+            'S2': 7,   // Connection established and closing
+            'S3': 8,   // Connection established and closing
+            'OTH': 9   // No SYN seen (midstream traffic)
+        };
+
+        // Convert values to numbers
+        const encodedValues = values.map((value, index) => {
+            // Protocol (position 0)
+            if (index === 0) {
+                const lowerValue = value.toLowerCase();
+                if (!(lowerValue in protocolEncoding)) {
+                    const validProtocols = Object.keys(protocolEncoding).join(', ');
+                    throw new Error(`Invalid protocol: ${value}. Valid options: ${validProtocols}`);
+                }
+                return protocolEncoding[lowerValue];
+            }
+            
+            // Service (position 1)
+            if (index === 1) {
+                const lowerValue = value.toLowerCase();
+                if (!(lowerValue in serviceEncoding)) {
+                    // Group similar services for better error messages
+                    const serviceGroups = {
+                        'Common Services': ['http', 'ftp', 'smtp', 'telnet', 'ssh'],
+                        'Network Services': ['domain', 'whois', 'ntp', 'netbios'],
+                        'System Services': ['finger', 'auth', 'exec', 'login'],
+                        'File Transfer': ['ftp_data', 'tftp', 'uucp'],
+                        'Email': ['pop_3', 'imap4', 'courier']
+                    };
+                    
+                    let validOptions = '';
+                    for (const [group, services] of Object.entries(serviceGroups)) {
+                        validOptions += `\n${group}: ${services.join(', ')}`;
+                    }
+                    
+                    throw new Error(`Invalid service: ${value}. Common options:${validOptions}\nSee full list in documentation.`);
+                }
+                return serviceEncoding[lowerValue];
+            }
+            
+            // Flag (position 2)
+            if (index === 2) {
+                const upperValue = value.toUpperCase();
+                if (!(upperValue in flagEncoding)) {
+                    throw new Error(`Invalid flag: ${value}. Valid options: ${Object.keys(flagEncoding).join(', ')}`);
+                }
+                return flagEncoding[upperValue];
+            }
+            
+            // Numerical values (positions 3-15)
+            const num = parseFloat(value);
+            if (isNaN(num)) {
+                throw new Error(`Position ${index+1} must be a number (got "${value}")`);
+            }
+            return num;
+        });
+
+        // Send request to backend
+        const response = await fetch('/predict_packet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ packet_data: encodedValues.join(',') })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        // Display results
+        const result = data.prediction;
+        let alertClass, icon;
+        
+        if (result.type === 'normal') {
+            alertClass = 'alert-success';
+            icon = '✅';
+        } else if (result.type === 'malware') {
+            alertClass = 'alert-danger';
+            icon = '🛑';
+        } else {
+            alertClass = 'alert-warning';
+            icon = '⚠️';
+        }
+
+        const indicatorsList = result.indicators.map(i => `<li>${i}</li>`).join('');
+
+        packetResultDiv.innerHTML = `
+            <div class="alert ${alertClass}">
+                <div class="result-header">
+                    <span class="result-icon">${icon}</span>
+                    <h3>${result.label} DETECTED</h3>
+                </div>
+                <div class="result-grid">
+                    <div class="result-label">Threat Type:</div>
+                    <div>${result.type.toUpperCase()}</div>
+                    
+                    <div class="result-label">Category:</div>
+                    <div>${result.category.toUpperCase()}</div>
+                    
+                    <div class="result-label">Confidence:</div>
+                    <div>${result.confidence}%</div>
+                </div>
+                
+                <div class="indicators">
+                    <h4>Detection Indicators:</h4>
+                    <ul>${indicatorsList}</ul>
+                </div>
+            </div>
+            
+            ${result.type.toLowerCase() !== 'normal' ? `
+            <div class="mitigation-info">
+                <h4>Recommended Actions:</h4>
+                <ul>
+                    ${getMitigationActions(result)}
+                </ul>
+                <button class="btn-details">View Detailed Report</button>
+            </div>
+            ` : ''}
+        `;
+
+        // Add event listener for details button
+        const detailsBtn = packetResultDiv.querySelector('.btn-details');
+        if (detailsBtn) {
+            detailsBtn.addEventListener('click', () => {
+                showDetailedReport(result);
+            });
+        }
+
+    } catch (error) {
+        packetResultDiv.innerHTML = `
+            <div class="error">
+                <h4>Error Detected</h4>
+                <p>${error.message}</p>
+                <div class='encoding-help'>
+                    <p><strong>Proper Format:</strong></p>
+                    <p>protocol,service,flag,13 numerical values</p>
+                    <p><strong>Example:</strong></p>
+                    <p class='example'>tcp,http,SF,100,200,0,0,0,0,0,1,0,0,0,0,0</p>
+                </div>
+                <button class="retry-btn">Try Again</button>
+            </div>
+        `;
+        
+        // Add event listener for retry button
+        const retryBtn = packetResultDiv.querySelector('.retry-btn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => {
+                document.getElementById('packetInput').focus();
+            });
+        }
+    }
+});
+
+// Helper function for mitigation actions
+function getMitigationActions(result) {
+    const category = result.category.toLowerCase();
+    const label = result.label.toLowerCase();
+    
+    let actions = [];
+    
+    // General actions for all attacks
+    actions.push('<li>Isolate affected systems from network</li>');
+    actions.push('<li>Review authentication and firewall logs</li>');
+    actions.push('<li>Update all security policies</li>');
+    
+    // Specific actions based on attack type
+    if (category.includes('dos')) {
+        actions.push('<li>Implement rate limiting on network services</li>');
+        actions.push('<li>Configure SYN cookies protection</li>');
+    }
+    
+    if (category.includes('probing')) {
+        actions.push('<li>Block scanning IP addresses at firewall</li>');
+        actions.push('<li>Enable intrusion detection/prevention systems</li>');
+    }
+    
+    if (label.includes('warez')) {
+        actions.push('<li>Immediately block FTP service on affected ports</li>');
+        actions.push('<li>Change all FTP credentials</li>');
+    }
+    
+    if (label.includes('teardrop')) {
+        actions.push('<li>Enable packet reassembly protection</li>');
+        actions.push('<li>Update network device firmware</li>');
+    }
+    
+    return actions.join('');
+}
+
+// Helper function for detailed report
+function showDetailedReport(result) {
+    const details = `
+        <div class="detailed-report">
+            <h3>Detailed Threat Analysis</h3>
+            <div class="report-grid">
+                <div>Threat Name:</div>
+                <div>${result.label}</div>
+                
+                <div>Classification:</div>
+                <div>${result.type} / ${result.category}</div>
+                
+                <div>Confidence Level:</div>
+                <div>${result.confidence}%</div>
+                
+                <div>First Seen:</div>
+                <div>${new Date().toLocaleString()}</div>
+                
+                <div>Key Indicators:</div>
+                <div><ul>${result.indicators.map(i => `<li>${i}</li>`).join('')}</ul></div>
+                
+                <div>Technical Details:</div>
+                <div>
+                    <p>Protocol: ${result.protocol || 'TCP'}</p>
+                    <p>Ports: ${result.ports || 'Various'}</p>
+                    <p>Payload Pattern: ${result.pattern || 'Not specified'}</p>
+                </div>
+            </div>
+            
+            <button class="btn-close-report">Close</button>
+        </div>
+    `;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = details;
+    document.body.appendChild(modal);
+    
+    // Add close button handler
+    modal.querySelector('.btn-close-report').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+}
+    </script>
+</body>
+</html>

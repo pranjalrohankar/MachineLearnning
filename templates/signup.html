@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Attack Detection Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(15, 29, 121);
+    color: #d1d1d1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: rgba(19, 6, 19, 0.6);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    height: 05%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    background-color: #333;
+    border-radius: 5px;
+}
+
+.signin-card {
+    background: rgba(19, 6, 19, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    width: 600px;
+    height: 500px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.signin-card h2 {
+    color: white;
+    margin-top: 05px;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 90%;
+    padding: 15px;
+    margin: 10px 0;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    text-align: center;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    box-shadow: 0 0 10px rgba(79, 147, 200, 0.7);
+    border-color: #38a1b2;
+}
+
+button {
+    width: 50%;
+    padding: 14px;
+    background: linear-gradient(145deg, #1e3c72, #2a5298);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), 
+                -4px -4px 10px rgba(255, 255, 255, 0.1),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.2), 
+                inset -2px -2px 5px rgba(0, 0, 0, 0.4);
+    font-size: 16px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(90deg, #64b5f6, #1a237e);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 25px;
+}
+
+button:hover {
+    background: linear-gradient(145deg, #2a5298, #1e3c72);
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4), 
+                -6px -6px 15px rgba(255, 255, 255, 0.2),
+                inset 3px 3px 6px rgba(255, 255, 255, 0.3), 
+                inset -3px -3px 6px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 
+                inset -4px -4px 8px rgba(255, 255, 255, 0.2);
+}
+
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(178, 71, 71, 0.1);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        
+        <a href="{{ url_for('login') }}">Login</a>
+        
+    </div>
+
+    <div class="main-content">
+        <div class="signin-card">
+            <h2>Create a New Account</h2>
+            <form id="registrationForm" action="/register" method="POST">
+                <input type="text" name="fullname" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="confirm-password" placeholder="Confirm Password" required>
+                <button type="submit">Sign Up</button>
+
+            </form>
+
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Attack Detection Website | All Rights Reserved
+    </footer>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const formObject = Object.fromEntries(formData.entries());
+            const messageDiv = document.getElementById('message');
+
+            // Check if passwords match
+            if (formObject.password !== formObject['confirm-password']) {
+                messageDiv.textContent = 'Passwords do not match!';
+                messageDiv.style.color = 'red';
+                return;
+            }
+
+            messageDiv.textContent = 'Processing...';
+            messageDiv.style.color = 'white';
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(formObject),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageDiv.style.color = 'green';
+                    messageDiv.textContent = result.message || 'Registration successful!';
+                    setTimeout(() => {
+                        window.location.href = "/home";
+                    }, 1000);
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = result.message || 'Registration failed.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+</body>
+</html>

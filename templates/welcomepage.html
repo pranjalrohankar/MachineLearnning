@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security with AI</title>
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #960ca8;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: rgba(0, 86, 179, 0.9);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around; /* Changed from space-between */
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Decreased gap between logo and text */
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            margin-right: 700px; /* Added margin to reduce gap */
+        }
+
+        .navbar .logo img {
+            height: 40px; /* Adjust the size of the logo */
+            width: auto;
+        }
+
+        .navbar .tagline {
+            font-size: 18px;
+            color: #fff;
+            font-style: italic;
+            white-space: nowrap; /* Prevent the tagline from wrapping */
+            margin-left: 10px; /* Added margin to reduce gap */
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #001227;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero .cta-button {
+            background-color: #fff;
+            color: #13021b;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .hero .cta-button:hover {
+            background-color: #0f6b9d;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .navbar .logo {
+                font-size: 20px;
+                margin-right: 0; /* Reset margin for smaller screens */
+            }
+
+            .navbar .tagline {
+                font-size: 16px;
+                margin-top: 10px;
+                white-space: normal; /* Allow wrapping on smaller screens */
+                margin-left: 0; /* Reset margin for smaller screens */
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero .cta-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar .logo {
+                font-size: 18px;
+            }
+
+            .navbar .tagline {
+                font-size: 14px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 0.9rem;
+            }
+
+            .hero .cta-button {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- Logo and Project Name -->
+        <a href="model1.html" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995485.png" alt="Network Security Logo">
+            Network Security
+        </a>
+
+        <!-- Tagline -->
+        <div class="tagline">
+            "Securing the Future with AI"
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div id="particles-js"></div>
+
+        <div class="hero-content">
+            <h1>Welcome to Network Security with AI</h1>
+            <p>Harness the power of machine learning to detect and prevent network threats in real-time. <br>
+               Our cutting-edge solution ensures your network stays secure, scalable, and resilient against evolving cyber threats.
+            </p>
+            <a href="{{ url_for('login') }}">
+                <button class="cta-button">Get Started</button>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5 },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6 }
+            },
+            interactivity: {
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" }
+                },
+                modes: {
+                    repulse: { distance: 200, duration: 0.4 },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(15, 29, 121);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #d1d1d1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: rgba(19, 6, 19, 0.6);
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .home-btn {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+        .main-content {
+            max-width: 1500px;
+            margin: 80px auto;
+            padding: 60px;
+            width: 800px;
+            background-color: rgba(19, 6, 19, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+        }
+        .xss-detection {
+            background-color: #f9f9f9;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .xss-detection textarea {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+        }
+        .xss-detection button {
+            padding: 15px 30px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 30%;
+            align-self: center;
+        }
+        .xss-detection button:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotateY(0);
+            }
+            50% {
+                transform: translateY(-20px) rotateY(10deg);
+            }
+        }
+        .modal-content img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        .modal-content p {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: black;
+            font-weight: bold;
+        }
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: rgba(34, 21, 176, 0.8);
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .modal-content button:hover {
+            background-color: rgba(34, 21, 176, 1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(178, 71, 71, 0.1);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="navbar">
+       
+    </div>
+
+    <div class="main-content">
+        <h1>Cross-Site Scripting (XSS) Detection</h1>
+        <div class="xss-detection">
+            <label for="inputText">Enter Input for XSS Detection:</label>
+            <textarea id="inputText" placeholder="Enter text to detect potential XSS..."></textarea>
+            <button onclick="predictXSS()">Predict</button>
+        </div>
+    </div>
+
+    <!-- Modal for displaying result -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Status Image">
+            <p id="modalResult"></p>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Attack Detection Website | All Rights Reserved
+    </footer>
+
+    <script>
+        // Function to predict XSS
+        function predictXSS() {
+            var inputText = document.getElementById("inputText").value;
+            var modalResult = document.getElementById("modalResult");
+            var modalImage = document.getElementById("modalImage");
+            var modal = document.getElementById("resultModal");
+
+            $.ajax({
+                url: '/predict_xss',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ text: inputText }),
+                success: function(response) {
+                    if (response.status === 'danger') {
+                        modalResult.innerHTML = "Danger: Potential XSS Detected!";
+                        modalResult.style.color = "red";
+                        modalImage.src = "https://cdn-icons-png.flaticon.com/512/753/753345.png"; // New Danger icon
+                    } else {
+                        modalResult.innerHTML = "Safe: No XSS Detected!";
+                        modalResult.style.color = "green";
+                        modalImage.src = "data:image/jpeg;base64,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"; // New Safe icon
+                    }
+                    modal.style.display = 'flex'; // Show the modal
+                },
+                error: function() {
+                    modalResult.innerHTML = "Error occurred during prediction.";
+                    modalResult.style.color = "red";
+                    modalImage.src = "https://cdn-icons-png.flaticon.com/512/753/753345.png"; // Danger icon
+                    modal.style.display = 'flex'; // Show the modal
+                }
+            });
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            var modal = document.getElementById("resultModal");
+            modal.style.display = 'none'; // Hide the modal
+        }
+    </script>
+</body>
+</html>
